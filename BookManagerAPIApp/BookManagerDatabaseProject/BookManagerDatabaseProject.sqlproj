@@ -61,12 +61,19 @@
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
     <Folder Include="dbo\Publish Profiles" />
+    <Folder Include="dbo\Stored Procedures" />
+    <Folder Include="PostDeployScripts" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Books.sql" />
     <Build Include="dbo\Tables\Category.sql" />
+    <Build Include="dbo\Stored Procedures\AddBook.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="dbo\Publish Profiles\BookManagerDatabase_Azure.publish.xml" />
+    <None Include="dbo\Publish Profiles\BookManagerDatabase_LocalDB.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="PostDeployScripts\Script.PostDeployCategory.sql" />
   </ItemGroup>
 </Project>
