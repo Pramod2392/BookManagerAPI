@@ -11,12 +11,12 @@ Post-Deployment Script Template
 */
 IF NOT EXISTS (SELECT * FROM Category)
 BEGIN
-    INSERT INTO Category ([Name]) VALUES ('Mystery')
-    INSERT INTO Category ([Name]) VALUES ('Romance')
-    INSERT INTO Category ([Name]) VALUES ('Biography')
-    INSERT INTO Category ([Name]) VALUES ('Auto-Biography')
-    INSERT INTO Category ([Name]) VALUES ('Thriller')
-    INSERT INTO Category ([Name]) VALUES ('Self-help')
-    INSERT INTO Category ([Name]) VALUES ('Comic')
-    INSERT INTO Category ([Name]) VALUES ('Fiction')
+    INSERT INTO Category ([Id],[Name]) VALUES (1,'Mystery')
+    INSERT INTO Category ([Id],[Name]) VALUES (2,'Romance')
+    INSERT INTO Category ([Id],[Name]) VALUES (3,'Biography')
+    INSERT INTO Category ([Id],[Name]) VALUES (4,'Auto-Biography')
+    INSERT INTO Category ([Id],[Name]) VALUES (5,'Thriller')
+    INSERT INTO Category ([Id],[Name]) VALUES (6,'Self-help')
+    INSERT INTO Category ([Id],[Name]) VALUES (7,'Comic')
+    INSERT INTO Category ([Id],[Name]) VALUES (8,'Fiction')
 END
