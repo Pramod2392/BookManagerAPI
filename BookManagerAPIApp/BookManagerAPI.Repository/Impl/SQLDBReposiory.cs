@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 
 namespace BookManagerAPI.Repository.Impl
 {
-    public class BookRepository : IBookRepository
+    public class SQLDBReposiory : ISQLDBRepository
     {
-        private readonly ILogger<BookRepository> _logger;
+        private readonly ILogger<SQLDBReposiory> _logger;
 
-        public BookRepository(ILogger<BookRepository> logger)
+        public SQLDBReposiory(ILogger<SQLDBReposiory> logger)
         {
             this._logger = logger;
         }

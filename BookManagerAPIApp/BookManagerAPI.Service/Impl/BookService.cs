@@ -10,9 +10,9 @@ namespace BookManagerAPI.Service.Impl
 {
     public class BookService : IBookService
     {
-        private readonly IBookRepository _bookRepository;
+        private readonly ISQLDBRepository _bookRepository;
 
-        public BookService(IBookRepository bookRepository)
+        public BookService(ISQLDBRepository bookRepository)
         {
             this._bookRepository = bookRepository;
         }

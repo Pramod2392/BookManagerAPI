@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BookManagerAPI.Repository.Interfaces
 {
-    public interface IBookRepository
+    public interface ISQLDBRepository
     {
         public Task<bool> AddNewBook(AddBookModel model);
     }
