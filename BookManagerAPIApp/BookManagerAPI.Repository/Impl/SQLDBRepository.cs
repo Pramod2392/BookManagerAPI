@@ -12,21 +12,22 @@ using System.Threading.Tasks;
 
 namespace BookManagerAPI.Repository.Impl
 {
-    public class SQLDBReposiory : ISQLDBRepository
+    public class SQLDBRepository : ISQLDBRepository
     {
-        private readonly ILogger<SQLDBReposiory> _logger;
+        private readonly ILogger<SQLDBRepository> _logger;
+        private readonly IDbConnection _connection;
 
-        public SQLDBReposiory(ILogger<SQLDBReposiory> logger)
+        public SQLDBRepository(ILogger<SQLDBRepository> logger, IDbConnection connection)
         {
-            this._logger = logger;
+            _logger = logger;
+            _connection = connection;
         }
         public async Task<bool> AddNewBook(AddBookModel model)
         {
             try
-            {
-                using IDbConnection connection = new SqlConnection("");
-                var queryResult = await connection.QueryAsync("dbo.spo.AddBook @name, @purchasedDate, @price, @imageBlobURL, @categoryId",
-                                    new { name = model.Name, purchasedDate = model.PurchasedDate, price = model.Price, imageBlobURL = model.ImageBlobURL, categoryId = model.CategoryId });
+            {                
+                var queryResult = await _connection.QueryAsync("dbo.spo.AddBook @name, @purchasedDate, @price, @imageBlobURL, @categoryId",
+                                    new { name = model.Name, purchasedDate = model.PurchasedDate.ToDateTime(TimeOnly.MinValue), price = model.Price, imageBlobURL = model.ImageBlobURL, categoryId = model.CategoryId });
                 return true;
             }
             catch (Exception ex)

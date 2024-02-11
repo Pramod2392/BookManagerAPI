@@ -1,0 +1,42 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using BookManagerAPI.Repository.Impl;
+using BookManagerAPI.Repository.Models;
+using Dapper;
+using Microsoft.Extensions.Logging;
+using Moq;
+using Moq.Dapper;
+using NUnit;
+using NUnit.Framework;
+using NUnit.Framework.Interfaces;
+
+namespace BookManagerAPI.Repository.Tests
+{
+    [TestFixture]
+    public class SQLDBRepositoryTests
+    {
+        [Test]
+        public async Task AddNewBook_When_Called_With_Valid_Request_Returns_True()
+        {
+            //Arrange
+            Mock<IDbConnection> moqSQLDBConnection = new Mock<IDbConnection>();
+            Mock<ILogger<SQLDBRepository>> moqLogger = new Mock<ILogger<SQLDBRepository>>();
+            AddBookModel addBookModel = new AddBookModel() { CategoryId = 1, ImageBlobURL = "http://sampleurl", Name = "Winning it my way", Price = 125.23M, PurchasedDate = DateOnly.FromDateTime(DateTime.Now) };
+            moqSQLDBConnection.SetupDapperAsync(x => x.QueryAsync(It.IsAny<string>(), new { name = addBookModel.Name, purchasedDate = addBookModel.PurchasedDate, price = addBookModel.Price, imageBlobURL = addBookModel.ImageBlobURL, categoryId = addBookModel.CategoryId }, It.IsAny<IDbTransaction>(), It.IsAny<int>(), It.IsAny<CommandType>())).Returns(() => true);
+
+            //Act
+            SQLDBRepository _sqlDBRepository = new SQLDBRepository(moqLogger.Object, moqSQLDBConnection.Object);
+            var result = await _sqlDBRepository.AddNewBook(addBookModel);
+
+            //Assert
+            Assert.Equals(true, result);
+        }
+    }
+}
