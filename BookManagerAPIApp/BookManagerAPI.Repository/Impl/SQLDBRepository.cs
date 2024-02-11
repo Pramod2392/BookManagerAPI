@@ -26,14 +26,14 @@ namespace BookManagerAPI.Repository.Impl
         {
             try
             {                
-                var queryResult = await _connection.QueryAsync("dbo.spo.AddBook @name, @purchasedDate, @price, @imageBlobURL, @categoryId",
-                                    new { name = model.Name, purchasedDate = model.PurchasedDate.ToDateTime(TimeOnly.MinValue), price = model.Price, imageBlobURL = model.ImageBlobURL, categoryId = model.CategoryId });
+                var queryResult = await _connection.QueryAsync<bool>("dbo.spo.AddBook @name, @purchasedDate, @price, @imageBlobURL, @categoryId",
+                                    new { name = model.Name, purchasedDate = model.PurchasedDate, price = model.Price, imageBlobURL = model.ImageBlobURL, categoryId = model.CategoryId });
                 return true;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception while adding new book to database");
-                return false;
+                throw;
             }            
         }
     }
