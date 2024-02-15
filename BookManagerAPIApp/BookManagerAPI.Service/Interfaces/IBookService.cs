@@ -1,4 +1,7 @@
-﻿using System;
+﻿using BookManagerAPI.Repository.Models;
+using BookManagerAPI.Service.Models;
+using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +11,6 @@ namespace BookManagerAPI.Service.Interfaces
 {
     public interface IBookService
     {
-        public Task SaveImageToBlobAndAddNewBook();
+        public Task SaveImageToBlobAndAddNewBook(IFormFile formFile, BookModel bookModel);
     }
 }

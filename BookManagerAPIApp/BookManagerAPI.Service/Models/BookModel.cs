@@ -9,7 +9,7 @@ namespace BookManagerAPI.Service.Models
     public class BookModel
     {
         public string Name { get; set; }
-        public DateOnly PurchasedDate { get; set; }
+        public DateTime PurchasedDate { get; set; }
         public decimal Price { get; set; }
         public byte[] imageData { get; set; }
         public int CategoryId { get; set; }
