@@ -1,5 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using BookManagerAPI.Repository.Interfaces;
+using BookManagerAPI.Repository.Models.ResponseModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
@@ -21,7 +22,7 @@ namespace BookManagerAPI.Repository.Impl
             this._logger = logger;
         }
 
-        public async Task<string> UploadImageToBlobAsync(IFormFile formFile)
+        public async Task<UploadImageToBlobAsyncResponseModel> UploadImageToBlobAsync(IFormFile formFile)
         {
             string blobName;
             try
@@ -34,12 +35,12 @@ namespace BookManagerAPI.Repository.Impl
                 var response = await blobClient.UploadAsync(fileStream, true);
                 if (response.GetRawResponse().Status == 201)
                 {
-                    return blobName;
+                    return new UploadImageToBlobAsyncResponseModel(true, response.GetRawResponse().ReasonPhrase,blobName);
                 }
                 else
                 {
                     _logger.LogInformation(response.GetRawResponse().ReasonPhrase);
-                    return string.Empty;
+                    return new UploadImageToBlobAsyncResponseModel(false, response.GetRawResponse().ReasonPhrase, string.Empty);
                 }                
             }
             catch (Exception ex)

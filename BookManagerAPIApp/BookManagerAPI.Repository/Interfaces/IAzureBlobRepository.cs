@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BookManagerAPI.Repository.Models.ResponseModels;
+using Microsoft.AspNetCore.Http;
 
 namespace BookManagerAPI.Repository.Interfaces
 {
     public interface IAzureBlobRepository
     {
-        Task<string> UploadImageToBlobAsync(IFormFile formFile);
+        Task<UploadImageToBlobAsyncResponseModel> UploadImageToBlobAsync(IFormFile formFile);
     }
 }
