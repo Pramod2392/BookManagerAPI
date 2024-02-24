@@ -13,7 +13,9 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "BookManagerDatabaseProject"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{E4F2403C-7712-4AC4-8169-C261566D477E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookManagerAPI.Repository.Tests", "BookManagerAPI.Repository.Tests\BookManagerAPI.Repository.Tests.csproj", "{BF20534B-57BB-4957-8204-A5C6E589DEF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookManagerAPI.Repository.Tests", "BookManagerAPI.Repository.Tests\BookManagerAPI.Repository.Tests.csproj", "{BF20534B-57BB-4957-8204-A5C6E589DEF3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookManagerAPI.Service.Tests", "BookManagerAPI.Service.Tests\BookManagerAPI.Service.Tests.csproj", "{40149636-F086-4F17-B678-39EF396A9E9A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,12 +45,17 @@ Global
 		{BF20534B-57BB-4957-8204-A5C6E589DEF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF20534B-57BB-4957-8204-A5C6E589DEF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF20534B-57BB-4957-8204-A5C6E589DEF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40149636-F086-4F17-B678-39EF396A9E9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40149636-F086-4F17-B678-39EF396A9E9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40149636-F086-4F17-B678-39EF396A9E9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40149636-F086-4F17-B678-39EF396A9E9A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{BF20534B-57BB-4957-8204-A5C6E589DEF3} = {E4F2403C-7712-4AC4-8169-C261566D477E}
+		{40149636-F086-4F17-B678-39EF396A9E9A} = {E4F2403C-7712-4AC4-8169-C261566D477E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C8818A55-B450-46AC-961A-A77CE5EF4571}
