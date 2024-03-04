@@ -34,7 +34,7 @@ namespace BookManagerAPI.Service.Impl
                 {
                     AddBookModel addBookModel = new() { CategoryId = bookModel.CategoryId, ImageBlobURL = response.BlobName, Name = bookModel.Name, Price = bookModel.Price, PurchasedDate = bookModel.PurchasedDate };
                     await _bookRepository.AddNewBook(addBookModel);
-                    return new SaveImageToBlobAndAddNewBookResponseModel(true, "");
+                    return new SaveImageToBlobAndAddNewBookResponseModel(true, "Book successfully added");
                 }
                 else
                 {
