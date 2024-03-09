@@ -15,7 +15,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{E4F2403C-7
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookManagerAPI.Repository.Tests", "BookManagerAPI.Repository.Tests\BookManagerAPI.Repository.Tests.csproj", "{BF20534B-57BB-4957-8204-A5C6E589DEF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookManagerAPI.Service.Tests", "BookManagerAPI.Service.Tests\BookManagerAPI.Service.Tests.csproj", "{40149636-F086-4F17-B678-39EF396A9E9A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookManagerAPI.Service.Tests", "BookManagerAPI.Service.Tests\BookManagerAPI.Service.Tests.csproj", "{40149636-F086-4F17-B678-39EF396A9E9A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C5891AE3-6ACE-4A3A-922E-E10274B47D75}"
+	ProjectSection(SolutionItems) = preProject
+		..\DataBaseDesignDiagram.png = ..\DataBaseDesignDiagram.png
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
