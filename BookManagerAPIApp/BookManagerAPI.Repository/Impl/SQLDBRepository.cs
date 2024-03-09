@@ -36,5 +36,22 @@ namespace BookManagerAPI.Repository.Impl
                 throw;
             }            
         }
+
+        public async Task<bool> AddNewUser(UserModel userModel)
+        {
+            try
+            {
+                var queryResult = await _connection.QueryAsync<bool>("dbo.spo.AddUser @userId, @firstName, @lastName, @displayName",
+                                        new { userId = userModel.UserId, firstName = userModel.FirstName, lastName = userModel.LastName, displayName = userModel.DisplayName });
+
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception while adding new user to database");
+                throw;
+            }
+        }
     }
 }

@@ -68,6 +68,8 @@
     <Build Include="dbo\Tables\Books.sql" />
     <Build Include="dbo\Tables\Category.sql" />
     <Build Include="dbo\Stored Procedures\AddBook.sql" />
+    <Build Include="dbo\Tables\Users.sql" />
+    <Build Include="dbo\Stored Procedures\AddUser.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="dbo\Publish Profiles\BookManagerDatabase_Azure.publish.xml" />
@@ -75,5 +77,8 @@
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployScripts\Script.PostDeployCategory.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="BookManagerDatabaseProject.refactorlog" />
   </ItemGroup>
 </Project>

@@ -10,5 +10,7 @@ namespace BookManagerAPI.Repository.Interfaces
     public interface ISQLDBRepository
     {
         public Task<bool> AddNewBook(AddBookModel model);
+
+        public Task<bool> AddNewUser(UserModel userModel);
     }
 }
