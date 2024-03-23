@@ -37,7 +37,7 @@ namespace BookManagerAPI.Repository.Impl
             }            
         }
 
-        public async Task<bool> AddNewUser(UserModel userModel)
+        public async Task<bool> AddNewUser(AddUserModel userModel)
         {
             try
             {

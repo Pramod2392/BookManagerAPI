@@ -1,6 +1,6 @@
 ﻿namespace BookManagerAPI.Repository.Models;
 
-public class UserModel
+public class AddUserModel
 {
     public long UserId { get; set; }
 
