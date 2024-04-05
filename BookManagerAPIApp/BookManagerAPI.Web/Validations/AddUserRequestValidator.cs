@@ -8,8 +8,8 @@ namespace BookManagerAPI.Web.Validations
         public AddUserRequestValidator()
         {
             RuleFor(x => x.DisplayName).NotEmpty();
-            RuleFor(x => x.Email).NotEmpty();
-            RuleFor(x => x.Email).EmailAddress();
+            RuleFor(x => x.UserEmail).NotEmpty();
+            RuleFor(x => x.UserEmail).EmailAddress();
             RuleFor(x => x.FirstName).NotEmpty();            
         }
     }

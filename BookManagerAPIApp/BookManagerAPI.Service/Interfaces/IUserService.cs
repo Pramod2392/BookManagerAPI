@@ -10,6 +10,6 @@ namespace BookManagerAPI.Service.Interfaces
 {
     public interface IUserService
     {
-        public Task<bool> AddUserAsync(UserRequestModel userModel); 
+        public Task<ServiceResponse<UserResponseModel>> AddUserAsync(UserRequestModel userModel); 
     }
 }

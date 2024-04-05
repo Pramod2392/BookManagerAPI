@@ -1,4 +1,5 @@
 using BookManagerAPI.Web.Contracts.User;
+using BookManagerAPI.Web.MappingProfiles;
 using BookManagerAPI.Web.Validations;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication;
@@ -17,6 +18,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IValidator<UserRequestModel>, AddUserRequestValidator>();
+
+builder.Services.AddAutoMapper(typeof(UserMappingProfile));
 
 var app = builder.Build();
 

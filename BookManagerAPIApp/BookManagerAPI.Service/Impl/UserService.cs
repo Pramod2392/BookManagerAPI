@@ -1,4 +1,6 @@
-﻿using BookManagerAPI.Repository.Interfaces;
+﻿using AutoMapper;
+using BookManagerAPI.Repository.Interfaces;
+using BookManagerAPI.Repository.Models;
 using BookManagerAPI.Service.Interfaces;
 using BookManagerAPI.Service.Models;
 using BookManagerAPI.Service.Models.User;
@@ -13,14 +15,21 @@ namespace BookManagerAPI.Service.Impl
     public class UserService : IUserService
     {
         private readonly ISQLDBRepository _sQLDBRepository;
+        private readonly IMapper _mapper;
 
-        public UserService(ISQLDBRepository sQLDBRepository)
+        public UserService(ISQLDBRepository sQLDBRepository, IMapper mapper)
         {
             this._sQLDBRepository = sQLDBRepository;
+            this._mapper = mapper;
         }
-        public Task<bool> AddUserAsync(UserRequestModel userModel)
+        public async Task<ServiceResponse<UserResponseModel>> AddUserAsync(UserRequestModel userModel)
         {
             //_sQLDBRepository.AddNewUser(userModel);
+
+            var addUserModel = _mapper.Map<AddUserModel>(userModel);
+
+            await _sQLDBRepository.AddNewUser(addUserModel);
+
             throw new NotImplementedException();
         }
     }
