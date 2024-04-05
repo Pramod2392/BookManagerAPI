@@ -41,8 +41,8 @@ namespace BookManagerAPI.Repository.Impl
         {
             try
             {
-                var queryResult = await _connection.QueryAsync<bool>("dbo.spo.AddUser @userId, @firstName, @lastName, @displayName",
-                                        new { userId = userModel.UserId, firstName = userModel.FirstName, lastName = userModel.LastName, displayName = userModel.DisplayName });
+                var queryResult = await _connection.QueryAsync<bool>("dbo.spo.AddUser @userId, @firstName, @lastName, @displayName, @emailId",
+                                        new { userId = userModel.UserId, firstName = userModel.FirstName, lastName = userModel.LastName, displayName = userModel.DisplayName, emailId = userModel.EmailId });
 
                 return true;
 
