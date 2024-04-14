@@ -25,7 +25,7 @@ namespace BookManagerAPI.Web.Controllers
 
         // POST api/<BooksController>
         [HttpPost]
-        public void Post(BookRequestModel bookRequestModel)
+        public async Task<BookResponseModel> Post(BookRequestModel bookRequestModel)
         {
             // Add model validation using fluent validation
 

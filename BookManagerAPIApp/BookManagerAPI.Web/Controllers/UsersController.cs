@@ -64,7 +64,7 @@ namespace BookManagerAPI.Web.Controllers
 
                 // Map controller model to service model
 
-                var serviceUserModel = _mapper.Map<BookManagerAPI.Service.Models.User.UserRequestModel>(userRequestModel);
+                var serviceUserModel = _mapper.Map<Service.Models.User.UserRequestModel>(userRequestModel);
 
                 // Call service model method
 
