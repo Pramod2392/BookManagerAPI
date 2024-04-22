@@ -1,9 +1,11 @@
+using BookManagerAPI.Web.Contracts.Book;
 using BookManagerAPI.Web.Contracts.User;
 using BookManagerAPI.Web.MappingProfiles;
 using BookManagerAPI.Web.Validations;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Azure;
 using Microsoft.Identity.Web;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,8 +20,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IValidator<UserRequestModel>, AddUserRequestValidator>();
+builder.Services.AddScoped<IValidator<BookRequestModel>, AddBookRequestValidator>();
 
 builder.Services.AddAutoMapper(typeof(UserMappingProfile));
+builder.Services.AddAutoMapper(typeof(BookMappingProfile));
+
+builder.Services.AddAzureClients(clientBuilder =>
+{
+    clientBuilder.AddBlobServiceClient(builder.Configuration.GetValue<string>("BlobConfiguration:StorageConnectionString"));
+});
+
 
 var app = builder.Build();
 

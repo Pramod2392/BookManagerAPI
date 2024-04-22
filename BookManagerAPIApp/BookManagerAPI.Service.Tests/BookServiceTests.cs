@@ -3,7 +3,7 @@ using BookManagerAPI.Repository.Models;
 using BookManagerAPI.Repository.Models.ResponseModels;
 using BookManagerAPI.Service.Impl;
 using BookManagerAPI.Service.Interfaces;
-using BookManagerAPI.Service.Models;
+using BookManagerAPI.Service.Models.Book;
 using Castle.Core.Logging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
@@ -38,11 +38,11 @@ namespace BookManagerAPI.Service.Tests
 
             IFormFile formFile = new FormFile(new MemoryStream(), 0, 11, "", "");
 
-            BookModel bookModel = new() { Name = "Sample", Price = 7.25M, CategoryId = 1, imageData = new byte[10], PurchasedDate = It.IsAny<DateTime>() };
+            BookRequestModel bookModel = new() { Name = "Sample", Price = 7.25M, CategoryId = 1, PurchasedDate = It.IsAny<DateTime>(), Image = formFile };
 
             // Act
             IBookService bookService = new BookService(_mockSQLDBRepository.Object,_mockAzureBlobRepository.Object,_mockBookServiceLogger.Object);
-            var response = await bookService.SaveImageToBlobAndAddNewBook(formFile, bookModel);
+            var response = await bookService.SaveImageToBlobAndAddNewBook(bookModel);
 
             //Assert
             Assert.That(response.IsSuccess, Is.True);

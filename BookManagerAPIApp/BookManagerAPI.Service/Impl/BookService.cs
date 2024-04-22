@@ -1,7 +1,7 @@
 ﻿using BookManagerAPI.Repository.Interfaces;
 using BookManagerAPI.Repository.Models;
 using BookManagerAPI.Service.Interfaces;
-using BookManagerAPI.Service.Models;
+using BookManagerAPI.Service.Models.Book;
 using BookManagerAPI.Service.Models.ResponseModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -25,11 +25,11 @@ namespace BookManagerAPI.Service.Impl
             this._azureBlobRepository = azureBlobRepository;
             this._logger = logger;
         }
-        public async Task<SaveImageToBlobAndAddNewBookResponseModel> SaveImageToBlobAndAddNewBook(IFormFile formFile, BookModel bookModel)
+        public async Task<SaveImageToBlobAndAddNewBookResponseModel> SaveImageToBlobAndAddNewBook(BookRequestModel bookModel)
         {
             try
             {
-                var response = await _azureBlobRepository.UploadImageToBlobAsync(formFile);
+                var response = await _azureBlobRepository.UploadImageToBlobAsync(bookModel.Image);
                 if (response.IsSuccess)
                 {
                     AddBookModel addBookModel = new() { CategoryId = bookModel.CategoryId, ImageBlobURL = response.BlobName, Name = bookModel.Name, Price = bookModel.Price, PurchasedDate = bookModel.PurchasedDate };
