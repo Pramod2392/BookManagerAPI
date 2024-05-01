@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[spo.AddBook]
+﻿CREATE PROCEDURE [AddBook]
 	@name nvarchar(50),
 	@purchasedDate date,
 	@price real,
@@ -7,10 +7,10 @@
 AS
 BEGIN
 
-	IF EXISTS(SELECT * FROM dbo.Category where Category.Id = @categoryId)
+	IF EXISTS(SELECT * FROM Category where Category.Id = @categoryId)
 	BEGIN
 
-		INSERT INTO dbo.Books ([Name], [PurchasedDate], [Price], [ImageBlobURL], [CategoryId])
+		INSERT INTO Books ([Name], [PurchasedDate], [Price], [ImageBlobURL], [CategoryId])
 		VALUES (@name, @purchasedDate, @price, @imageBlobURL, @categoryId)	
 	END
 END
