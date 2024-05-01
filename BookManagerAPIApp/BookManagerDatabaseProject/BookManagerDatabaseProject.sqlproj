@@ -70,6 +70,7 @@
     <Build Include="dbo\Stored Procedures\AddBook.sql" />
     <Build Include="dbo\Tables\Users.sql" />
     <Build Include="dbo\Stored Procedures\AddUser.sql" />
+    <Build Include="dbo\Stored Procedures\GetBooks.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="dbo\Publish Profiles\BookManagerDatabase_Azure.publish.xml" />

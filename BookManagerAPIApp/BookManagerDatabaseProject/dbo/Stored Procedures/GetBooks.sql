@@ -1,0 +1,7 @@
+﻿CREATE PROCEDURE [GetBooks]
+	
+AS
+BEGIN
+	SELECT * FROM Books
+END
+
