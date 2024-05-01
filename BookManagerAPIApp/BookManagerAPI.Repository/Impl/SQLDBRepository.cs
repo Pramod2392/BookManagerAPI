@@ -1,6 +1,7 @@
 ﻿using BookManagerAPI.Repository.Interfaces;
 using BookManagerAPI.Repository.Models;
 using Dapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -15,20 +16,26 @@ namespace BookManagerAPI.Repository.Impl
     public class SQLDBRepository : ISQLDBRepository
     {
         private readonly ILogger<SQLDBRepository> _logger;
+        private readonly IConfiguration _configuration;
         private readonly IDbConnection _connection;
 
-        public SQLDBRepository(ILogger<SQLDBRepository> logger, IDbConnection connection)
+        public SQLDBRepository(ILogger<SQLDBRepository> logger, IConfiguration configuration)
         {
             _logger = logger;
-            _connection = connection;
+            this._configuration = configuration;
+            _connection = new SqlConnection(Convert.ToString(_configuration["SQLDBConnectionString"]));
         }
         public async Task<bool> AddNewBook(AddBookModel model)
         {
             try
-            {                
-                var queryResult = await _connection.QueryAsync<bool>("dbo.spo.AddBook @name, @purchasedDate, @price, @imageBlobURL, @categoryId",
+            {
+                using (var connection = _connection)
+                {
+                    var queryResult = await connection.QueryAsync<bool>("dbo.AddBook @name, @purchasedDate, @price, @imageBlobURL, @categoryId",
                                     new { name = model.Name, purchasedDate = model.PurchasedDate, price = model.Price, imageBlobURL = model.ImageBlobURL, categoryId = model.CategoryId });
-                return true;
+                    return true;
+                }
+                
             }
             catch (Exception ex)
             {
