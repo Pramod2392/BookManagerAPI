@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[AddUser]
+﻿CREATE PROCEDURE [AddUser]
 	@userId bigint,
 	@firstName varchar(50),
 	@lastName varchar(50),
