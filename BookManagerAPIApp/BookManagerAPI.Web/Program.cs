@@ -40,6 +40,7 @@ builder.Services.AddTransient<IDbConnection, SqlConnection>();
 builder.Services.AddTransient<IAzureBlobRepository, AzureBlobRepository>();
 builder.Services.AddTransient<ISQLDBRepository, SQLDBRepository>();
 builder.Services.AddTransient<IBookService,BookService>();
+builder.Services.AddTransient<IUserService, UserService>();
 
 
 var app = builder.Build();
