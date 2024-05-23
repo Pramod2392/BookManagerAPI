@@ -26,14 +26,14 @@ namespace BookManagerAPI.Repository.Impl
             this._configuration = configuration;
         }
 
-        public async Task<UploadImageToBlobAsyncResponseModel> UploadImageToBlobAsync(IFormFile formFile)
+        public async Task<UploadImageToBlobAsyncResponseModel> UploadImageToBlobAsync(IFormFile formFile, string userId)
         {
             string blobName;
             try
             {
                 using var fileStream = formFile.OpenReadStream();
                 var blobContainerClient = _blobServiceClient.GetBlobContainerClient(_configuration["BlobConfiguration:ContainerName"]);
-                blobName = FrameBlobName(formFile.FileName);
+                blobName = FrameBlobName(userId, formFile.FileName);
                 var blobClient = blobContainerClient.GetBlobClient(blobName);
 
                 var response = await blobClient.UploadAsync(fileStream, true);
@@ -54,10 +54,29 @@ namespace BookManagerAPI.Repository.Impl
             }
         }
 
-        private string FrameBlobName(string fileName)
+
+        public async Task<byte[]> GetImageFromBlob(string blobURL)
         {
-            var uniqueId = Guid.NewGuid();
-            var blobName = $"{fileName}_{uniqueId}";
+            try
+            {
+                var blobContainerClient = _blobServiceClient.GetBlobContainerClient(_configuration["BlobConfiguration:ContainerName"]);
+                var splitArray = blobURL.Split('/');
+                var blobName = splitArray[splitArray.Length - 2] + '/' + splitArray[splitArray.Length - 1];
+                var blobClient = blobContainerClient.GetBlobClient(blobName);
+                var downloadResult = await blobClient.DownloadContentAsync();
+                return downloadResult.Value.Content.ToArray();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error occured while fetching image from blob. {ex.Message}");
+                throw;
+            }            
+        }
+
+        
+        private string FrameBlobName(string userId, string fileName)
+        {            
+            var blobName = $"{userId}/{fileName}";
             return blobName;
         }
     }

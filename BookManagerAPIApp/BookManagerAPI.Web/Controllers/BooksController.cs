@@ -26,8 +26,9 @@ namespace BookManagerAPI.Web.Controllers
 
         // GET: api/<BooksController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IEnumerable<string>> Get()
         {
+            await _bookService.GetAllBooks();
             return new string[] { "value1", "value2" };
         }
 

@@ -36,6 +36,7 @@ builder.Services.AddAzureClients(clientBuilder =>
     clientBuilder.AddBlobServiceClient(builder.Configuration.GetValue<string>("BlobConfiguration:StorageConnectionString"));
 });
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IDbConnection, SqlConnection>();
 builder.Services.AddTransient<IAzureBlobRepository, AzureBlobRepository>();
 builder.Services.AddTransient<ISQLDBRepository, SQLDBRepository>();

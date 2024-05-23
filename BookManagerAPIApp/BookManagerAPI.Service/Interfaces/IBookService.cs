@@ -13,5 +13,7 @@ namespace BookManagerAPI.Service.Interfaces
     public interface IBookService
     {
         public Task<SaveImageToBlobAndAddNewBookResponseModel> SaveImageToBlobAndAddNewBook(BookRequestModel bookModel);
+
+        Task<IEnumerable<GetBookModel>> GetAllBooks();
     }
 }

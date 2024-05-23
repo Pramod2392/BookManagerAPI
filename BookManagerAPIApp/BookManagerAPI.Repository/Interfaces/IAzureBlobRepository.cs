@@ -5,6 +5,8 @@ namespace BookManagerAPI.Repository.Interfaces
 {
     public interface IAzureBlobRepository
     {
-        Task<UploadImageToBlobAsyncResponseModel> UploadImageToBlobAsync(IFormFile formFile);
+        Task<UploadImageToBlobAsyncResponseModel> UploadImageToBlobAsync(IFormFile formFile, string userId);
+        Task<byte[]> GetImageFromBlob(string blobURL);
+
     }
 }

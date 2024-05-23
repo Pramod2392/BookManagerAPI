@@ -34,7 +34,22 @@ namespace BookManagerAPI.Web.Controllers
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            var bearerToken = HttpContext?.Request?.Headers?.Authorization.ToString();
+                        
+
+            string token = "";
+            if (bearerToken != null)
+            {
+                if( bearerToken.Split(' ').Length == 2 ) 
+                {
+                    token = bearerToken.Split(' ')[1].ToString();
+                }
+                else 
+                {
+                    token = bearerToken;
+                }
+            }
+            return new string[] { token };
         }
 
         // GET api/<UsersController>/5
