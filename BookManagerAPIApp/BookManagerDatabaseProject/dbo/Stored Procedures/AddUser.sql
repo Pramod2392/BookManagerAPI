@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [AddUser]
-	@userId bigint,
+	@userId uniqueidentifier,
 	@firstName varchar(50),
 	@lastName varchar(50),
 	@displayName varchar(50),

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -57,6 +58,20 @@ namespace BookManagerAPI.Repository.Impl
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception while adding new user to database");
+                throw;
+            }
+        }
+
+        public async Task<bool> AddBookUserMap(AddBookUserMap addBookUserMap)
+        {
+            try
+            {
+                var queryResult = await _connection.QueryAsync<bool>("dbo.AddBookUserMap @bookId, @userId", new { bookId = addBookUserMap.BookId, userId = addBookUserMap.UserId });
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while adding book-user map");
                 throw;
             }
         }

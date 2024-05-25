@@ -12,5 +12,7 @@ namespace BookManagerAPI.Repository.Interfaces
         public Task<bool> AddNewBook(AddBookModel model);
 
         public Task<bool> AddNewUser(AddUserModel userModel);
+
+        public Task<bool> AddBookUserMap(AddBookUserMap addBookUserMap);
     }
 }

@@ -74,9 +74,9 @@ namespace BookManagerAPI.Repository.Impl
         }
 
         
-        private string FrameBlobName(string userId, string fileName)
+        private string FrameBlobName(string folderName, string fileName)
         {            
-            var blobName = $"{userId}/{fileName}";
+            var blobName = $"{folderName}/{fileName}";
             return blobName;
         }
     }

@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [GetBooks]
-	
+	@userId bigint
 AS
 BEGIN
-	SELECT * FROM Books
+	SELECT * FROM Books WHERE user
 END
 

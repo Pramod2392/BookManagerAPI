@@ -28,11 +28,12 @@ namespace BookManagerAPI.Service.Tests
             Mock<ISQLDBRepository> _mockSQLDBRepository = new Mock<ISQLDBRepository>();
             Mock<IAzureBlobRepository> _mockAzureBlobRepository = new Mock<IAzureBlobRepository>();
             Mock<ILogger<BookService>> _mockBookServiceLogger = new Mock<ILogger<BookService>>();
+            Mock<HttpContextAccessor> _mockHTTPContextAccessor = new Mock<HttpContextAccessor>();
 
             UploadImageToBlobAsyncResponseModel uploadImageToBlobAsyncResponseModel = new(true,string.Empty, "sampleBlob");
             AddBookModel addBookModel = new AddBookModel() { Name = "Sample", Price = 7.25M, CategoryId = 1, ImageBlobURL = "sampleURL", PurchasedDate = It.IsAny<DateTime>() };
 
-            _mockAzureBlobRepository.Setup(x => x.UploadImageToBlobAsync(It.IsAny<IFormFile>())).Returns(async () => uploadImageToBlobAsyncResponseModel);
+            _mockAzureBlobRepository.Setup(x => x.UploadImageToBlobAsync(It.IsAny<IFormFile>(), It.IsAny<string>())).Returns(async () => uploadImageToBlobAsyncResponseModel);
 
             _mockSQLDBRepository.Setup(x => x.AddNewBook(addBookModel)).Returns(async () => true);
 
@@ -41,7 +42,7 @@ namespace BookManagerAPI.Service.Tests
             BookRequestModel bookModel = new() { Name = "Sample", Price = 7.25M, CategoryId = 1, PurchasedDate = It.IsAny<DateTime>(), Image = formFile };
 
             // Act
-            IBookService bookService = new BookService(_mockSQLDBRepository.Object,_mockAzureBlobRepository.Object,_mockBookServiceLogger.Object);
+            IBookService bookService = new BookService(_mockSQLDBRepository.Object,_mockAzureBlobRepository.Object,_mockBookServiceLogger.Object, _mockHTTPContextAccessor.Object);
             var response = await bookService.SaveImageToBlobAndAddNewBook(bookModel);
 
             //Assert

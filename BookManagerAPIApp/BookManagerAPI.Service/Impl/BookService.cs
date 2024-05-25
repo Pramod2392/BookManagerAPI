@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -39,6 +40,7 @@ namespace BookManagerAPI.Service.Impl
                 {
                     AddBookModel addBookModel = new() { CategoryId = bookModel.CategoryId, ImageBlobURL = response.BlobName, Name = bookModel.Name, Price = bookModel.Price, PurchasedDate = bookModel.PurchasedDate };
                     await _bookRepository.AddNewBook(addBookModel);
+                    await _bookRepository.AddBookUserMap(new AddBookUserMap() { UserId = new System.Data.SqlTypes.SqlGuid(new Guid(userId)), BookId = 1 });
                     return new SaveImageToBlobAndAddNewBookResponseModel(true, "Book successfully added");
                 }
                 else
