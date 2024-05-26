@@ -1,5 +1,6 @@
 ﻿using BookManagerAPI.Repository.Interfaces;
 using BookManagerAPI.Repository.Models;
+using BookManagerAPI.Repository.Models.ResponseModels;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -7,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -72,6 +74,19 @@ namespace BookManagerAPI.Repository.Impl
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error while adding book-user map");
+                throw;
+            }
+        }
+
+        public async Task<GetAllUserBooksResponse> GetAllBooksForGivenUserId(SqlGuid userId)
+        {
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while fetching books");
                 throw;
             }
         }

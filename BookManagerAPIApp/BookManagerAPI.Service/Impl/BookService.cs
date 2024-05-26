@@ -60,11 +60,12 @@ namespace BookManagerAPI.Service.Impl
         {
             try
             {
-                //Get UserId from token
+                // Get UserId from token
                 var userId = GetUserIdFromToken();
 
-                // Get All the books for the given user id from SQL
-
+                // Get All BooksIds for the given user Id from BookUserMap table
+                // Get All Books for the given Ids from Book table
+                
 
                 // Fetch the image from azure blob using blob url
                 await Task.CompletedTask;
