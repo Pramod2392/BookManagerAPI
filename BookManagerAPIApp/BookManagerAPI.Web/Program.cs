@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Azure;
 using Microsoft.Identity.Web;
+using Microsoft.OpenApi.Models;
 using System.Data;
 using System.Data.SqlClient;
 var builder = WebApplication.CreateBuilder(args);
@@ -43,6 +44,38 @@ builder.Services.AddTransient<ISQLDBRepository, SQLDBRepository>();
 builder.Services.AddTransient<IBookService,BookService>();
 builder.Services.AddTransient<IUserService, UserService>();
 
+builder.Services.AddSwaggerGen(option =>
+{
+    option.SwaggerDoc("v1", new OpenApiInfo { Title = "Book Manager API", Version = "v1" });
+    option.AddSecurityDefinition(
+        "Bearer",
+        new OpenApiSecurityScheme
+        {
+            In = ParameterLocation.Header,
+            Description = "Please enter a valid token",
+            Name = "Authorization",
+            Type = SecuritySchemeType.Http,
+            BearerFormat = "JWT",
+            Scheme = "Bearer"
+        }
+    );
+    option.AddSecurityRequirement(
+        new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                },
+                new string[] { }
+            }
+        }
+    );
+});
 
 var app = builder.Build();
 
