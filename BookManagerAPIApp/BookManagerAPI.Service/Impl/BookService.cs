@@ -1,6 +1,8 @@
-﻿using BookManagerAPI.Repository.Interfaces;
+﻿using Azure.Storage.Blobs.Models;
+using BookManagerAPI.Repository.Interfaces;
 using BookManagerAPI.Repository.Models;
 using BookManagerAPI.Service.Interfaces;
+using BookManagerAPI.Service.Models;
 using BookManagerAPI.Service.Models.Book;
 using BookManagerAPI.Service.Models.ResponseModels;
 using Microsoft.AspNetCore.Http;
@@ -56,27 +58,35 @@ namespace BookManagerAPI.Service.Impl
             }
         }
 
-        public async Task<IEnumerable<GetBookModel>> GetAllBooks()
+        public async Task<ServiceResponse<IEnumerable<GetBookModel>>> GetAllBooks()
         {
             try
             {
+                var bookList = new List<GetBookModel>();
+
                 // Get UserId from token
                 var userId = GetUserIdFromToken();
 
                 // Get All BooksIds for the given user Id from BookUserMap table
                 // Get All Books for the given Ids from Book table
-                
 
-                // Fetch the image from azure blob using blob url
-                await Task.CompletedTask;
+                //var booksList = await _bookRepository.GetAllBooksForGivenUserId(new System.Data.SqlTypes.SqlGuid(userId));
+                var booksList = await _bookRepository.GetAllBooksForGivenUserId(new Guid(userId));
 
+                // Get image from blob url
 
-                return new List<GetBookModel>();
+                foreach (var book in booksList)
+                {
+                    bookList.Add(new GetBookModel() { Image = await _azureBlobRepository.GetImageFromBlob(book.ImageBlobURL),
+                                                      Id = book.Id, Title = book.Name});
+                }
+
+                return new ServiceResponse<IEnumerable<GetBookModel>>(bookList);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error while fetching books");
-                throw;
+                return new ServiceResponse<IEnumerable<GetBookModel>>("Error while fetching books");                
             }
         }
 

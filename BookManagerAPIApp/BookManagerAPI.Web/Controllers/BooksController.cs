@@ -3,7 +3,9 @@ using BookManagerAPI.Service.Interfaces;
 using BookManagerAPI.Service.Models.Book;
 using BookManagerAPI.Web.Contracts.Book;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,6 +13,7 @@ namespace BookManagerAPI.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class BooksController : ControllerBase
     {
         private readonly IValidator<Contracts.Book.BookRequestModel> _validator;
@@ -26,10 +29,17 @@ namespace BookManagerAPI.Web.Controllers
 
         // GET: api/<BooksController>
         [HttpGet]
-        public async Task<IEnumerable<string>> Get()
+        [Authorize]
+        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
+        public async Task<IEnumerable<GetBookModel>> Get()
         {
-            await _bookService.GetAllBooks();
-            return new string[] { "value1", "value2" };
+            var GetUserBooksResponse = await _bookService.GetAllBooks();
+
+            if (GetUserBooksResponse.IsSuccess == false)
+            {
+
+            }
+            return GetUserBooksResponse.Data;
         }
 
         // GET api/<BooksController>/5

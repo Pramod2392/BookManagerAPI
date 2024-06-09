@@ -78,11 +78,12 @@ namespace BookManagerAPI.Repository.Impl
             }
         }
 
-        public async Task<GetAllUserBooksResponse> GetAllBooksForGivenUserId(SqlGuid userId)
+        public async Task<IEnumerable<GetAllUserBooksResponse>> GetAllBooksForGivenUserId(Guid userId)
         {
             try
             {
-                throw new NotImplementedException();
+                var queryResult = await _connection.QueryAsync<GetAllUserBooksResponse>("dbo.GetBooks @userId", new { userId = userId });
+                return queryResult;
             }
             catch (Exception ex)
             {
