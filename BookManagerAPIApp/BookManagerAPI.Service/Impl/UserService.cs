@@ -26,11 +26,21 @@ namespace BookManagerAPI.Service.Impl
         {
             //_sQLDBRepository.AddNewUser(userModel);
 
+            // User Id has data-type mis-match, please check
+
             var addUserModel = _mapper.Map<AddUserModel>(userModel);
 
-            await _sQLDBRepository.AddNewUser(addUserModel);
-
-            throw new NotImplementedException();
+            var response = await _sQLDBRepository.AddNewUser(addUserModel);
+            
+            if (response)
+            {
+                var returnModel = _mapper.Map<UserResponseModel>(userModel);
+                return new ServiceResponse<UserResponseModel>(returnModel);
+            }
+            else
+            {
+                return new ServiceResponse<UserResponseModel>("Add user failed");
+            }                        
         }
     }
 }

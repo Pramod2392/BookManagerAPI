@@ -2,8 +2,7 @@
 	@userId uniqueidentifier,
 	@firstName varchar(50),
 	@lastName varchar(50),
-	@displayName varchar(50),
-	@createdDate datetime,
+	@displayName varchar(50),	
 	@emailId varchar(50)
 AS
 BEGIN

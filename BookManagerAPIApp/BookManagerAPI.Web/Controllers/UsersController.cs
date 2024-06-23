@@ -64,6 +64,7 @@ namespace BookManagerAPI.Web.Controllers
         [Authorize]
         [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(typeof(string), 500)]
+        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
         public async Task<ActionResult<UserResponseModel>> Post(UserRequestModel userRequestModel)
         {
             try
@@ -74,7 +75,7 @@ namespace BookManagerAPI.Web.Controllers
 
                 if (validationResult.IsValid == false)
                 {
-                    ValidationProblem();
+                    return ValidationProblem();                    
                 }
 
                 // Map controller model to service model

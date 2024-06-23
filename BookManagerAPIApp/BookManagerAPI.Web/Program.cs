@@ -2,6 +2,7 @@ using BookManagerAPI.Repository.Impl;
 using BookManagerAPI.Repository.Interfaces;
 using BookManagerAPI.Service.Impl;
 using BookManagerAPI.Service.Interfaces;
+using BookManagerAPI.Service.MappingProfiles;
 using BookManagerAPI.Web.Contracts.Book;
 using BookManagerAPI.Web.Contracts.User;
 using BookManagerAPI.Web.MappingProfiles;
@@ -31,6 +32,7 @@ builder.Services.AddScoped<IValidator<BookRequestModel>, AddBookRequestValidator
 
 builder.Services.AddAutoMapper(typeof(UserMappingProfile));
 builder.Services.AddAutoMapper(typeof(BookMappingProfile));
+builder.Services.AddAutoMapper(typeof(UserServiceMappingProfile));
 
 builder.Services.AddAzureClients(clientBuilder =>
 {
