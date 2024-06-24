@@ -26,13 +26,19 @@ namespace BookManagerAPI.Repository.Impl
         {
             _logger = logger;
             this._configuration = configuration;
-            _connection = new SqlConnection(Convert.ToString(_configuration["SQLDBConnectionString"]));
+            _connection = new SqlConnection(GetConnectionString());
         }
+
+        private string GetConnectionString() 
+        {
+            return Convert.ToString(_configuration["SQLDBConnectionString"]);
+        }
+
         public async Task<bool> AddNewBook(AddBookModel model)
         {
             try
             {
-                using (var connection = _connection)
+                using (var connection = new SqlConnection(GetConnectionString()))
                 {
                     var queryResult = await connection.QueryAsync<bool>("dbo.AddBook @name, @purchasedDate, @price, @imageBlobURL, @categoryId",
                                     new { name = model.Name, purchasedDate = model.PurchasedDate, price = model.Price, imageBlobURL = model.ImageBlobURL, categoryId = model.CategoryId });
@@ -51,10 +57,13 @@ namespace BookManagerAPI.Repository.Impl
         {
             try
             {
-                var queryResult = await _connection.QueryAsync<bool>("AddUser @userId, @firstName, @lastName, @displayName, @emailId",
-                                        new { userId = userModel.UserId, firstName = userModel.FirstName, lastName = userModel.LastName, displayName = userModel.DisplayName, emailId = userModel.EmailId });
+                using (var connection = new SqlConnection(GetConnectionString()))
+                {
+                    var queryResult = await _connection.QueryAsync<bool>("AddUser @userId, @firstName, @lastName, @displayName, @emailId",
+                                                    new { userId = userModel.UserId, firstName = userModel.FirstName, lastName = userModel.LastName, displayName = userModel.DisplayName, emailId = userModel.EmailId });
 
-                return true;
+                    return true; 
+                }
 
             }
             catch (Exception ex)
@@ -68,8 +77,11 @@ namespace BookManagerAPI.Repository.Impl
         {
             try
             {
-                var queryResult = await _connection.QueryAsync<bool>("dbo.AddBookUserMap @bookId, @userId", new { bookId = addBookUserMap.BookId, userId = addBookUserMap.UserId });
-                return true;
+                using (var connection = new SqlConnection(GetConnectionString()))
+                {
+                    var queryResult = await connection.QueryAsync<bool>("dbo.AddBookUserMap @bookId, @userId", new { bookId = addBookUserMap.BookId, userId = addBookUserMap.UserId });
+                    return true; 
+                }
             }
             catch (Exception ex)
             {

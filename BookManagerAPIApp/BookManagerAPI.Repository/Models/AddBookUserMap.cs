@@ -12,6 +12,6 @@ namespace BookManagerAPI.Repository.Models
     {
         public int BookId { get; set; }
 
-        public SqlGuid UserId { get; set; }
+        public Guid UserId { get; set; }
     }
 }

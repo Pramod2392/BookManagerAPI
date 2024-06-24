@@ -51,8 +51,8 @@ namespace BookManagerAPI.Web.Controllers
 
         // POST api/<BooksController>
         [HttpPost]
-        [Authorize]
-        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
+        //[Authorize]
+        //[RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
         public async Task<ActionResult<Contracts.Book.BookResponseModel>> Post(Contracts.Book.BookRequestModel bookRequestModel)
         {
             // Add model validation using fluent validation

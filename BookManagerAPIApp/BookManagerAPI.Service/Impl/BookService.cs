@@ -35,14 +35,14 @@ namespace BookManagerAPI.Service.Impl
         {
             try
             {
-                var userId = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type.Equals("sub")).Single().Value;
+                var userId = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")).Single().Value;
 
                 var response = await _azureBlobRepository.UploadImageToBlobAsync(bookModel.Image, userId);
                 if (response.IsSuccess)
                 {
                     AddBookModel addBookModel = new() { CategoryId = bookModel.CategoryId, ImageBlobURL = response.BlobName, Name = bookModel.Name, Price = bookModel.Price, PurchasedDate = bookModel.PurchasedDate };
                     await _bookRepository.AddNewBook(addBookModel);
-                    await _bookRepository.AddBookUserMap(new AddBookUserMap() { UserId = new System.Data.SqlTypes.SqlGuid(new Guid(userId)), BookId = 1 });
+                    await _bookRepository.AddBookUserMap(new AddBookUserMap() { UserId = new Guid(userId), BookId = 1 });
                     return new SaveImageToBlobAndAddNewBookResponseModel(true, "Book successfully added");
                 }
                 else
