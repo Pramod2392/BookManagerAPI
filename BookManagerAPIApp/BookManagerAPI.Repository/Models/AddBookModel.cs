@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace BookManagerAPI.Repository.Models
 {
     public class AddBookModel
-    {        
+    {
+        public int Id { get; set; }
         public string Name { get; set; }
         public DateTime PurchasedDate { get; set; }
         public decimal Price { get; set; }

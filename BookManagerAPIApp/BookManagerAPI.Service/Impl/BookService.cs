@@ -41,8 +41,14 @@ namespace BookManagerAPI.Service.Impl
                 if (response.IsSuccess)
                 {
                     AddBookModel addBookModel = new() { CategoryId = bookModel.CategoryId, ImageBlobURL = response.BlobName, Name = bookModel.Name, Price = bookModel.Price, PurchasedDate = bookModel.PurchasedDate };
-                    await _bookRepository.AddNewBook(addBookModel);
-                    await _bookRepository.AddBookUserMap(new AddBookUserMap() { UserId = new Guid(userId), BookId = 1 });
+                    var addBookResult = await _bookRepository.AddNewBook(addBookModel);
+
+                    if (addBookResult?.Id <= 0)
+                    {
+                        return new SaveImageToBlobAndAddNewBookResponseModel(false, "Error while adding book");
+                    }
+
+                    await _bookRepository.AddBookUserMap(new AddBookUserMap() { UserId = new Guid(userId), BookId = addBookResult.Id });
                     return new SaveImageToBlobAndAddNewBookResponseModel(true, "Book successfully added");
                 }
                 else

@@ -29,20 +29,20 @@ namespace BookManagerAPI.Repository.Impl
             _connection = new SqlConnection(GetConnectionString());
         }
 
-        private string GetConnectionString() 
+        private string? GetConnectionString() 
         {
             return Convert.ToString(_configuration["SQLDBConnectionString"]);
         }
 
-        public async Task<bool> AddNewBook(AddBookModel model)
+        public async Task<AddBookModel?> AddNewBook(AddBookModel model)
         {
             try
             {
                 using (var connection = new SqlConnection(GetConnectionString()))
                 {
-                    var queryResult = await connection.QueryAsync<bool>("dbo.AddBook @name, @purchasedDate, @price, @imageBlobURL, @categoryId",
+                    var queryResult = await connection.QueryAsync<AddBookModel>("dbo.AddBook @name, @purchasedDate, @price, @imageBlobURL, @categoryId",
                                     new { name = model.Name, purchasedDate = model.PurchasedDate, price = model.Price, imageBlobURL = model.ImageBlobURL, categoryId = model.CategoryId });
-                    return true;
+                    return queryResult == null ? new AddBookModel() : queryResult.FirstOrDefault();
                 }
                 
             }

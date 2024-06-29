@@ -11,6 +11,10 @@ BEGIN
 	BEGIN
 
 		INSERT INTO Books ([Name], [PurchasedDate], [Price], [ImageBlobURL], [CategoryId])
-		VALUES (@name, @purchasedDate, @price, @imageBlobURL, @categoryId)	
+		VALUES (@name, @purchasedDate, @price, @imageBlobURL, @categoryId);
+
+		SELECT * from Books WHERE Id = SCOPE_IDENTITY();
+
+		RETURN;
 	END
 END
