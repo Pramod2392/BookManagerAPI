@@ -16,5 +16,7 @@ namespace BookManagerAPI.Service.Interfaces
         public Task<SaveImageToBlobAndAddNewBookResponseModel> SaveImageToBlobAndAddNewBook(BookRequestModel bookModel);
 
         Task<ServiceResponse<IEnumerable<GetBookModel>>> GetAllBooks();
+
+        Task<IEnumerable<Category>> GetAllCategoriesAsync();
     }
 }

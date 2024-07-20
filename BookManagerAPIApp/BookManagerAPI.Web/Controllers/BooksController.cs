@@ -2,6 +2,7 @@
 using BookManagerAPI.Service.Interfaces;
 using BookManagerAPI.Service.Models.Book;
 using BookManagerAPI.Web.Contracts.Book;
+using BookManagerAPI.Web.Contracts.Category;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -90,6 +91,15 @@ namespace BookManagerAPI.Web.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        // Get All Categories
+        [HttpGet]
+        [Route("/api/Books/GetCategories")]
+        public async Task<List<Category>> GetAllCategories()
+        {
+            var response = await _bookService.GetAllCategoriesAsync();
+            return response.ToList();
         }
     }
 }

@@ -103,5 +103,20 @@ namespace BookManagerAPI.Repository.Impl
                 throw;
             }
         }
+
+        public async Task<IEnumerable<CategoryModel>> GetAllCategories()
+        {
+            try
+            {
+                using var connection = new SqlConnection(GetConnectionString());
+                var queryResult = await connection.QueryAsync<CategoryModel>("dbo.GetAllCategories");
+                return queryResult;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while fetching Categories");
+                throw;
+            }
+        }
     }
 }

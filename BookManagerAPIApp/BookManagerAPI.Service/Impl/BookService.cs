@@ -1,4 +1,5 @@
-﻿using Azure.Storage.Blobs.Models;
+﻿using AutoMapper;
+using Azure.Storage.Blobs.Models;
 using BookManagerAPI.Repository.Interfaces;
 using BookManagerAPI.Repository.Models;
 using BookManagerAPI.Service.Interfaces;
@@ -23,13 +24,16 @@ namespace BookManagerAPI.Service.Impl
         private readonly IAzureBlobRepository _azureBlobRepository;
         private readonly ILogger<BookService> _logger;        
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IMapper _mapper;
 
-        public BookService(ISQLDBRepository bookRepository, IAzureBlobRepository azureBlobRepository, ILogger<BookService> logger, IHttpContextAccessor httpContextAccessor)
+        public BookService(ISQLDBRepository bookRepository, IAzureBlobRepository azureBlobRepository, ILogger<BookService> logger, IHttpContextAccessor httpContextAccessor,
+            IMapper mapper)
         {
             this._bookRepository = bookRepository;
             this._azureBlobRepository = azureBlobRepository;
             this._logger = logger;            
             this._httpContextAccessor = httpContextAccessor;
+            this._mapper = mapper;
         }
         public async Task<SaveImageToBlobAndAddNewBookResponseModel> SaveImageToBlobAndAddNewBook(BookRequestModel bookModel)
         {
@@ -93,6 +97,21 @@ namespace BookManagerAPI.Service.Impl
             {
                 _logger.LogError(ex, "Error while fetching books");
                 return new ServiceResponse<IEnumerable<GetBookModel>>("Error while fetching books");                
+            }
+        }
+
+        public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
+        {
+            try
+            {
+                var categoriesList = await _bookRepository.GetAllCategories();
+                var categories = _mapper.Map<IEnumerable<Category>>(categoriesList);
+                return categories;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while fetching categories");
+                throw;
             }
         }
 

@@ -33,6 +33,7 @@ builder.Services.AddScoped<IValidator<BookRequestModel>, AddBookRequestValidator
 builder.Services.AddAutoMapper(typeof(UserMappingProfile));
 builder.Services.AddAutoMapper(typeof(BookMappingProfile));
 builder.Services.AddAutoMapper(typeof(UserServiceMappingProfile));
+builder.Services.AddAutoMapper(typeof(CategoryMappingProfile));
 
 builder.Services.AddAzureClients(clientBuilder =>
 {

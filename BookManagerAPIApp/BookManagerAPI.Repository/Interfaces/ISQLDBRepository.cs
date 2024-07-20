@@ -11,12 +11,14 @@ namespace BookManagerAPI.Repository.Interfaces
 {
     public interface ISQLDBRepository
     {
-        public Task<AddBookModel?> AddNewBook(AddBookModel model);
+        Task<AddBookModel?> AddNewBook(AddBookModel model);
 
-        public Task<bool> AddNewUser(AddUserModel userModel);
+        Task<bool> AddNewUser(AddUserModel userModel);
 
-        public Task<bool> AddBookUserMap(AddBookUserMap addBookUserMap);
+        Task<bool> AddBookUserMap(AddBookUserMap addBookUserMap);
 
-        public Task<IEnumerable<GetAllUserBooksResponse>> GetAllBooksForGivenUserId(Guid userId);
+        Task<IEnumerable<GetAllUserBooksResponse>> GetAllBooksForGivenUserId(Guid userId);
+
+        Task<IEnumerable<CategoryModel>> GetAllCategories();
     }
 }
