@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookManagerAPI.Service", "B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookManagerAPI.Repository", "BookManagerAPI.Repository\BookManagerAPI.Repository.csproj", "{A90E103B-8682-4506-93EB-EED093AB7C85}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "BookManagerDatabaseProject", "BookManagerDatabaseProject\BookManagerDatabaseProject.sqlproj", "{59D8DDDF-1A76-4C18-B8D6-C563001FA21F}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{E4F2403C-7712-4AC4-8169-C261566D477E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookManagerAPI.Repository.Tests", "BookManagerAPI.Repository.Tests\BookManagerAPI.Repository.Tests.csproj", "{BF20534B-57BB-4957-8204-A5C6E589DEF3}"
