@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using BookManagerAPI.Service.Interfaces;
 using BookManagerAPI.Service.Models.Book;
+using BookManagerAPI.Service.Models.Pagination;
 using BookManagerAPI.Web.Contracts.Book;
 using BookManagerAPI.Web.Contracts.Category;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
+using System.Net;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -32,15 +34,20 @@ namespace BookManagerAPI.Web.Controllers
         [HttpGet]
         [Authorize]
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
-        public async Task<IEnumerable<GetBookModel>> Get()
+        public async Task<ActionResult<PagedGetBookModel>> Get([FromQuery]PaginationModel paginationModel, [FromQuery] string? searchText)
         {
-            var GetUserBooksResponse = await _bookService.GetAllBooks();
+            if (paginationModel?.PageNumber < 1 || paginationModel?.PageSize < 1)
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest,"Page number or page size value is invalid");
+            }
+
+            var GetUserBooksResponse = await _bookService.GetAllBooks(paginationModel, searchText);            
 
             if (GetUserBooksResponse.IsSuccess == false)
             {
-
+                return StatusCode((int)HttpStatusCode.InternalServerError, GetUserBooksResponse.Message);
             }
-            return GetUserBooksResponse.Data;
+            return Ok(GetUserBooksResponse.Data);
         }
 
         // GET api/<BooksController>/5

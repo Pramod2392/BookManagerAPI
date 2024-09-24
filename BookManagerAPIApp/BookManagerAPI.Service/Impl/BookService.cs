@@ -5,6 +5,7 @@ using BookManagerAPI.Repository.Models;
 using BookManagerAPI.Service.Interfaces;
 using BookManagerAPI.Service.Models;
 using BookManagerAPI.Service.Models.Book;
+using BookManagerAPI.Service.Models.Pagination;
 using BookManagerAPI.Service.Models.ResponseModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -15,6 +16,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace BookManagerAPI.Service.Impl
 {
@@ -68,7 +70,7 @@ namespace BookManagerAPI.Service.Impl
             }
         }
 
-        public async Task<ServiceResponse<IEnumerable<GetBookModel>>> GetAllBooks()
+        public async Task<ServiceResponse<PagedGetBookModel>> GetAllBooks(PaginationModel paginationModel, string searchText)
         {
             try
             {
@@ -81,22 +83,45 @@ namespace BookManagerAPI.Service.Impl
                 // Get All Books for the given Ids from Book table
 
                 //var booksList = await _bookRepository.GetAllBooksForGivenUserId(new System.Data.SqlTypes.SqlGuid(userId));
-                var booksList = await _bookRepository.GetAllBooksForGivenUserId(new Guid(userId));
+                var books = await _bookRepository.GetAllBooksForGivenUserId(new Guid(userId));
+
+                if (books == null)
+                {
+                    return new ServiceResponse<PagedGetBookModel>("Error fetching books from DB");
+                }
+
+                // search
+                if (!string.IsNullOrWhiteSpace(searchText))
+                {
+                    books = books?.Where(x => x.Name.Contains(searchText,StringComparison.OrdinalIgnoreCase)).ToList();
+                }
+
+                // pagination
+                var pagedBookList = books?.Skip((paginationModel.PageNumber - 1) * paginationModel.PageSize).Take(paginationModel.PageSize);
 
                 // Get image from blob url
 
-                foreach (var book in booksList)
+                foreach (var book in pagedBookList)
                 {
                     bookList.Add(new GetBookModel() { Image = await _azureBlobRepository.GetImageFromBlob(book.ImageBlobURL),
                                                       Id = book.Id, Title = book.Name});
-                }
+                }                
 
-                return new ServiceResponse<IEnumerable<GetBookModel>>(bookList);
+                PagedGetBookModel pagedGetBookModel = new()
+                {
+                    PageNumber = paginationModel.PageNumber,
+                    PageSize = paginationModel.PageSize,
+                    TotalCount = books?.Count() > 0 ? books.Count() : 0 ,
+                    Books = bookList
+                };
+
+
+                return new ServiceResponse<PagedGetBookModel>(pagedGetBookModel);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error while fetching books");
-                return new ServiceResponse<IEnumerable<GetBookModel>>("Error while fetching books");                
+                return new ServiceResponse<PagedGetBookModel>("Error while fetching books");                
             }
         }
 
