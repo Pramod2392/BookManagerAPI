@@ -46,7 +46,7 @@ namespace BookManagerAPI.Service.Impl
                 var response = await _azureBlobRepository.UploadImageToBlobAsync(bookModel.Image, userId);
                 if (response.IsSuccess)
                 {
-                    AddBookModel addBookModel = new() { CategoryId = bookModel.CategoryId, ImageBlobURL = response.BlobName, Name = bookModel.Name, Price = bookModel.Price, PurchasedDate = bookModel.PurchasedDate };
+                    AddBookModel addBookModel = new() { CategoryId = bookModel.CategoryId, ImageBlobURL = response.BlobName, Name = bookModel.Name, Price = bookModel.Price, PurchasedDate = bookModel.PurchasedDate, LanguageId = bookModel.LanguageId };
                     var addBookResult = await _bookRepository.AddNewBook(addBookModel);
 
                     if (addBookResult?.Id <= 0)

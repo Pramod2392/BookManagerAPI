@@ -40,8 +40,8 @@ namespace BookManagerAPI.Repository.Impl
             {
                 using (var connection = new SqlConnection(GetConnectionString()))
                 {
-                    var queryResult = await connection.QueryAsync<AddBookModel>("dbo.AddBook @name, @purchasedDate, @price, @imageBlobURL, @categoryId",
-                                    new { name = model.Name, purchasedDate = model.PurchasedDate, price = model.Price, imageBlobURL = model.ImageBlobURL, categoryId = model.CategoryId });
+                    var queryResult = await connection.QueryAsync<AddBookModel>("dbo.AddBook @name, @purchasedDate, @price, @imageBlobURL, @categoryId, @languageId",
+                                    new { name = model.Name, purchasedDate = model.PurchasedDate, price = model.Price, imageBlobURL = model.ImageBlobURL, categoryId = model.CategoryId, languageId = model.LanguageId });
                     return queryResult == null ? new AddBookModel() : queryResult.FirstOrDefault();
                 }
                 
