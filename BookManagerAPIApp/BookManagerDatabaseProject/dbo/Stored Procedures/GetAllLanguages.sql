@@ -1,0 +1,6 @@
+﻿CREATE PROCEDURE [GetAllLanguages]
+	
+AS
+BEGIN
+	SELECT * FROM Language
+END

@@ -7,4 +7,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="user_id" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="f3067f66-7fc0-4331-a5ba-e0b8a273deab" ChangeDateTime="10/13/2024 06:00:56">
+    <Property Name="ElementName" Value="[dbo].[FK_Books_Language (]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[Books]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_Books_Language (Id)]" />
+  </Operation>
 </Operations>
