@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using BookManagerAPI.Service.Interfaces;
+using BookManagerAPI.Service.Models;
 using BookManagerAPI.Service.Models.Book;
 using BookManagerAPI.Service.Models.Pagination;
-using BookManagerAPI.Web.Contracts.Book;
-using BookManagerAPI.Web.Contracts.Category;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -106,6 +105,15 @@ namespace BookManagerAPI.Web.Controllers
         public async Task<List<Category>> GetAllCategories()
         {
             var response = await _bookService.GetAllCategoriesAsync();
+            return response.ToList();
+        }
+
+        //Get All Languages
+        [HttpGet]
+        [Route("/api/Books/GetLanguages")]
+        public async Task<List<Language>> GetAllLanguages()
+        {
+            var response = await _bookService.GetAllLanguages();
             return response.ToList();
         }
     }

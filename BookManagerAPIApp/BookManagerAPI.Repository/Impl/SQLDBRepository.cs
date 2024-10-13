@@ -118,5 +118,20 @@ namespace BookManagerAPI.Repository.Impl
                 throw;
             }
         }
+
+        public async Task<IEnumerable<LanguageModel>> GetAllLanguages()
+        {
+            try
+            {
+                using var connection = new SqlConnection(GetConnectionString());
+                var queryResult = await connection.QueryAsync<LanguageModel>("dbo.GetAllLanguages");
+                return queryResult;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while fetching languages");
+                throw;
+            }
+        }
     }
 }

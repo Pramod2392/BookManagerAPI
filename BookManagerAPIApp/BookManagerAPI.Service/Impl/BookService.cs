@@ -140,6 +140,21 @@ namespace BookManagerAPI.Service.Impl
             }
         }
 
+        public async Task<IEnumerable<Language>> GetAllLanguages()
+        {
+            try
+            {
+                var languageList = await _bookRepository.GetAllLanguages();
+                var languages = _mapper.Map<IEnumerable<Language>>(languageList);
+                return languages;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while fetching languages");
+                throw;
+            }
+        }
+
         private string GetUserIdFromToken()
         {
             var _bearerToken = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
