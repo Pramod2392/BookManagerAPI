@@ -15,9 +15,8 @@ namespace BookManagerAPI.Service.Interfaces
     public interface IBookService
     {
         public Task<SaveImageToBlobAndAddNewBookResponseModel> SaveImageToBlobAndAddNewBook(BookRequestModel bookModel);
-
         Task<ServiceResponse<PagedGetBookModel>> GetAllBooks(PaginationModel paginationModel, string searchText);
-
         Task<IEnumerable<Category>> GetAllCategoriesAsync();
+        Task<IEnumerable<Language>> GetAllLanguages();
     }
 }

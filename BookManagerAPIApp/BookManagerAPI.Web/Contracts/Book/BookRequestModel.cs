@@ -8,6 +8,7 @@ namespace BookManagerAPI.Web.Contracts.Book
         public IFormFile Image { get; set; }
         public int CategoryId { get; set; }
         public decimal Price { get; set; }
+        public int LanguageId { get; set; }
 
         [JsonIgnore]
         public DateTime PurchasedDate { get; set; } = DateTime.Now;

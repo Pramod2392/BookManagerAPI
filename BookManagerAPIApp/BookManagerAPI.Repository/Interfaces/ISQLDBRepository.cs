@@ -20,5 +20,6 @@ namespace BookManagerAPI.Repository.Interfaces
         Task<IEnumerable<GetAllUserBooksResponse>> GetAllBooksForGivenUserId(Guid userId);
 
         Task<IEnumerable<CategoryModel>> GetAllCategories();
+        Task<IEnumerable<LanguageModel>> GetAllLanguages();
     }
 }

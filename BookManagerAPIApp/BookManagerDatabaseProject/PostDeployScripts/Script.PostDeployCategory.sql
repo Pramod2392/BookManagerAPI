@@ -20,3 +20,10 @@ BEGIN
     INSERT INTO Category ([Id],[Name]) VALUES (7,'Comic')
     INSERT INTO Category ([Id],[Name]) VALUES (8,'Fiction')
 END
+
+IF NOT EXISTS (SELECT * FROM Language)
+BEGIN
+    INSERT INTO Language ([Id],[Name]) VALUES (1,'Kannada')
+    INSERT INTO Language ([Id],[Name]) VALUES (2,'English')
+    INSERT INTO Language ([Id],[Name]) VALUES (3,'Hindi')    
+END
