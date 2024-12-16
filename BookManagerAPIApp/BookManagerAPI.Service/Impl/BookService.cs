@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Azure.Storage.Blobs.Models;
 using BookManagerAPI.Repository.Interfaces;
 using BookManagerAPI.Repository.Models;
 using BookManagerAPI.Service.Interfaces;
@@ -8,15 +7,9 @@ using BookManagerAPI.Service.Models.Book;
 using BookManagerAPI.Service.Models.Pagination;
 using BookManagerAPI.Service.Models.ResponseModels;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace BookManagerAPI.Service.Impl
 {
@@ -27,21 +20,51 @@ namespace BookManagerAPI.Service.Impl
         private readonly ILogger<BookService> _logger;        
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMapper _mapper;
+        private readonly IMemoryCache _memoryCache;
+        private readonly string CacheBookListKeySuffix = "_BooksList";    
+        private readonly MemoryCacheEntryOptions _cacheEntryOptions;
 
         public BookService(ISQLDBRepository bookRepository, IAzureBlobRepository azureBlobRepository, ILogger<BookService> logger, IHttpContextAccessor httpContextAccessor,
-            IMapper mapper)
+            IMapper mapper, IMemoryCache memoryCache)
         {
             this._bookRepository = bookRepository;
             this._azureBlobRepository = azureBlobRepository;
             this._logger = logger;            
             this._httpContextAccessor = httpContextAccessor;
             this._mapper = mapper;
+            this._memoryCache = memoryCache;
+            this._cacheEntryOptions = new MemoryCacheEntryOptions()
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
+                SlidingExpiration = TimeSpan.FromMinutes(2),
+            };
         }
         public async Task<SaveImageToBlobAndAddNewBookResponseModel> SaveImageToBlobAndAddNewBook(BookRequestModel bookModel)
         {
             try
-            {
+            {                
                 var userId = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")).Single().Value;
+
+                // Check if book already exists. If exists, return conflict
+                var cacheKey = GetCacheKey(userId);
+                List<string> booksList = new();
+                // Check the inmemory cache, if the cache is empty, then fetch all the books from db
+                if (_memoryCache.TryGetValue(cacheKey, out booksList))
+                {
+                    if (booksList.Any(x => x.Equals(bookModel.Name, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        return new SaveImageToBlobAndAddNewBookResponseModel(false, "Book already exists", System.Net.HttpStatusCode.Conflict);
+                    }
+                }
+                else
+                {
+                    var bookListFromDB = await _bookRepository.GetAllBooksForGivenUserId(new Guid(userId));
+                    if (bookListFromDB.Any(x => x.Name.Equals(bookModel.Name, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        return new SaveImageToBlobAndAddNewBookResponseModel(false, "Book already exists", System.Net.HttpStatusCode.Conflict);
+                    }
+                    booksList = bookListFromDB.Select(x => x.Name).ToList();
+                }
 
                 var response = await _azureBlobRepository.UploadImageToBlobAsync(bookModel.Image, userId);
                 if (response.IsSuccess)
@@ -51,16 +74,20 @@ namespace BookManagerAPI.Service.Impl
 
                     if (addBookResult?.Id <= 0)
                     {
-                        return new SaveImageToBlobAndAddNewBookResponseModel(false, "Error while adding book");
+                        return new SaveImageToBlobAndAddNewBookResponseModel(false, "Error while adding book", System.Net.HttpStatusCode.InternalServerError);
                     }
 
+                    // Update cache
+                    booksList.Add(addBookResult?.Name);
+                    _memoryCache.Set(GetCacheKey(userId), booksList, _cacheEntryOptions);
+
                     await _bookRepository.AddBookUserMap(new AddBookUserMap() { UserId = new Guid(userId), BookId = addBookResult.Id });
-                    return new SaveImageToBlobAndAddNewBookResponseModel(true, "Book successfully added");
+                    return new SaveImageToBlobAndAddNewBookResponseModel(true, "Book successfully added", System.Net.HttpStatusCode.Created);
                 }
                 else
                 {
                     _logger.LogError("Error whie uploading image to blob");
-                    return new SaveImageToBlobAndAddNewBookResponseModel(false, "Error whie uploading image to blob");
+                    return new SaveImageToBlobAndAddNewBookResponseModel(false, "Error whie uploading image to blob", System.Net.HttpStatusCode.InternalServerError);
                 }
             }
             catch (Exception ex)
@@ -90,10 +117,20 @@ namespace BookManagerAPI.Service.Impl
                     return new ServiceResponse<PagedGetBookModel>("Error fetching books from DB");
                 }
 
+                // Add the list of book names to InMemoryCache, only if the cache key is not found
+                List<string> booksList = new ();
+                string cacheKey = GetCacheKey(userId);
+                List<string> bookNames = new();
+                bookNames = books.Select(book => book.Name).ToList();
+                if (!_memoryCache.TryGetValue(cacheKey, out booksList))
+                {
+                    _memoryCache.Set(cacheKey, bookNames, _cacheEntryOptions);
+                }
+
                 // search
                 if (!string.IsNullOrWhiteSpace(searchText))
                 {
-                    books = books?.Where(x => x.Name.Contains(searchText,StringComparison.OrdinalIgnoreCase)).ToList();
+                    books = books?.Where(x => x.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)).ToList();
                 }
 
                 // pagination
@@ -103,15 +140,19 @@ namespace BookManagerAPI.Service.Impl
 
                 foreach (var book in pagedBookList)
                 {
-                    bookList.Add(new GetBookModel() { Image = await _azureBlobRepository.GetImageFromBlob(book.ImageBlobURL),
-                                                      Id = book.Id, Title = book.Name});
-                }                
+                    bookList.Add(new GetBookModel()
+                    {
+                        Image = await _azureBlobRepository.GetImageFromBlob(book.ImageBlobURL),
+                        Id = book.Id,
+                        Title = book.Name
+                    });
+                }
 
                 PagedGetBookModel pagedGetBookModel = new()
                 {
                     PageNumber = paginationModel.PageNumber,
                     PageSize = paginationModel.PageSize,
-                    TotalCount = books?.Count() > 0 ? books.Count() : 0 ,
+                    TotalCount = books?.Count() > 0 ? books.Count() : 0,
                     Books = bookList
                 };
 
@@ -123,6 +164,11 @@ namespace BookManagerAPI.Service.Impl
                 _logger.LogError(ex, "Error while fetching books");
                 return new ServiceResponse<PagedGetBookModel>("Error while fetching books");                
             }
+        }
+
+        private string GetCacheKey(string userId)
+        {
+            return $"{userId}{CacheBookListKeySuffix}";
         }
 
         public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
