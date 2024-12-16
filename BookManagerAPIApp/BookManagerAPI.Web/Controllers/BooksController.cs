@@ -73,14 +73,22 @@ namespace BookManagerAPI.Web.Controllers
             // Use automapper to map request model to service model
             var serviceLayerBookRequestModel = _mapper.Map<Service.Models.Book.BookRequestModel>(bookRequestModel);
 
+            // Check if the book already exists
+            //
+
             // Call service layer method
             var serviceResponse = await _bookService.SaveImageToBlobAndAddNewBook(serviceLayerBookRequestModel);
 
             // Use automapper to map service model to response model
 
-            if (serviceResponse.IsSuccess == false)
+            if (serviceResponse.IsSuccess == false && serviceResponse.StatusCode == HttpStatusCode.InternalServerError)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, serviceResponse.ErrorMessage);
+            }
+
+            if (serviceResponse.IsSuccess == false && serviceResponse.StatusCode == HttpStatusCode.Conflict)
+            {
+                return StatusCode(StatusCodes.Status409Conflict, serviceResponse.ErrorMessage);
             }
 
             // return the response

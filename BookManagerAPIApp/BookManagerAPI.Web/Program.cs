@@ -15,6 +15,7 @@ using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
 using System.Data;
 using System.Data.SqlClient;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -29,6 +30,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IValidator<UserRequestModel>, AddUserRequestValidator>();
 builder.Services.AddScoped<IValidator<BookRequestModel>, AddBookRequestValidator>();
+
+builder.Services.AddMemoryCache();
 
 builder.Services.AddAutoMapper(typeof(UserMappingProfile));
 builder.Services.AddAutoMapper(typeof(BookMappingProfile));
