@@ -19,6 +19,7 @@ BEGIN
     INSERT INTO Category ([Id],[Name]) VALUES (6,'Self-help')
     INSERT INTO Category ([Id],[Name]) VALUES (7,'Comic')
     INSERT INTO Category ([Id],[Name]) VALUES (8,'Fiction')
+    INSERT INTO Category ([Id],[Name]) VALUES (9,'Cookbook')
 END
 
 IF NOT EXISTS (SELECT * FROM Language)
